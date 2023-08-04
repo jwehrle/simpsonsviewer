@@ -9,8 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:simpsonsviewer/main.dart';
+import 'package:simpsonsviewer/models/character.dart';
 
 void main() {
+
+  test('Character test', () {
+    Map<String, dynamic> testMap = {};
+    Character character = Character.fromMap(testMap);
+    expect(character.name, '');
+    expect(character.description, '');
+    expect(character.imageURL, '');
+  });
+
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
