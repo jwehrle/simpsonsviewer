@@ -40,6 +40,16 @@ const Map<String, dynamic> noImageCharacterMap = {
       "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…",
 };
 
+/// Example character map with no image url. Happens frequently.
+const Map<String, dynamic> weirdImageCharacterMap = {
+  "FirstURL": "https://duckduckgo.com/Apu_Nahasapeemapetilan",
+  "Icon": {"Height": "", "URL": true, "Width": ""},
+  "Result":
+      "<a href=\"https://duckduckgo.com/Apu_Nahasapeemapetilon\">Apu Nahasapeemapetilon</a><br>Apu Nahasapeemapetilon is a recurring char…",
+  "Text":
+      "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…",
+};
+
 /// Example character map for failed API result.
 const Map<String, dynamic> emptyCharacterMap = {};
 
@@ -62,6 +72,14 @@ void main() {
 
     test('Character test: No image map', () {
       Character character = Character.fromMap(noImageCharacterMap);
+      expect(character.name, "Apu Nahasapeemapetilon");
+      expect(character.description,
+          "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…");
+      expect(character.imageURL, "");
+    });
+
+    test('Character test: No image map', () {
+      Character character = Character.fromMap(weirdImageCharacterMap);
       expect(character.name, "Apu Nahasapeemapetilon");
       expect(character.description,
           "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…");
