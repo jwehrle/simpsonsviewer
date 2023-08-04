@@ -5,28 +5,75 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:simpsonsviewer/main.dart';
 import 'package:simpsonsviewer/models/character.dart';
 
-const Map<String, dynamic> testCharacterMap = {
-"FirstURL" : "https://duckduckgo.com/Apu_Nahasapeemapetilan",
-"Icon" : {"Height" : "", "URL" : "/i/99b04638.png", "Width" : "" },
-"Result" : "<a href=\"https://duckduckgo.com/Apu_Nahasapeemapetilon\">Apu Nahasapeemapetilon</a><br>Apu Nahasapeemapetilon is a recurring char…",
-"Text" : "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…",
+/// Example character map taken from successful API result.
+const Map<String, dynamic> wellFormedCharacterMap = {
+  "FirstURL": "https://duckduckgo.com/Apu_Nahasapeemapetilan",
+  "Icon": {"Height": "", "URL": "/i/99b04638.png", "Width": ""},
+  "Result":
+      "<a href=\"https://duckduckgo.com/Apu_Nahasapeemapetilon\">Apu Nahasapeemapetilon</a><br>Apu Nahasapeemapetilon is a recurring char…",
+  "Text":
+      "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…",
 };
 
-void main() {
+/// Example character map with only one word in Text field. Edge case for name extraction.
+const Map<String, dynamic> textWithSingleCharacterMap = {
+  "FirstURL": "https://duckduckgo.com/Apu_Nahasapeemapetilan",
+  "Icon": {"Height": "", "URL": "/i/99b04638.png", "Width": ""},
+  "Result":
+      "<a href=\"https://duckduckgo.com/Apu_Nahasapeemapetilon\">Apu Nahasapeemapetilon</a><br>Apu Nahasapeemapetilon is a recurring char…",
+  "Text": "Apu",
+};
 
-  test('Character test', () {
-    Character character = Character.fromMap(testCharacterMap);
-    expect(character.name, "Apu Nahasapeemapetilon");
-    expect(character.description, "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…");
-    expect(character.imageURL, "/i/99b04638.png");
+/// Example character map with no image url. Happens frequently.
+const Map<String, dynamic> noImageCharacterMap = {
+  "FirstURL": "https://duckduckgo.com/Apu_Nahasapeemapetilan",
+  "Icon": {"Height": "", "URL": "", "Width": ""},
+  "Result":
+      "<a href=\"https://duckduckgo.com/Apu_Nahasapeemapetilon\">Apu Nahasapeemapetilon</a><br>Apu Nahasapeemapetilon is a recurring char…",
+  "Text":
+      "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…",
+};
+
+/// Example character map for failed API result.
+const Map<String, dynamic> emptyCharacterMap = {};
+
+void main() {
+  group('Character model tests', () {
+    test('Character test: Wellformed map', () {
+      Character character = Character.fromMap(wellFormedCharacterMap);
+      expect(character.name, "Apu Nahasapeemapetilon");
+      expect(character.description,
+          "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…");
+      expect(character.imageURL, "/i/99b04638.png");
+    });
+
+    test('Character test: Text with single word map', () {
+      Character character = Character.fromMap(textWithSingleCharacterMap);
+      expect(character.name, "Apu");
+      expect(character.description, "Apu");
+      expect(character.imageURL, "/i/99b04638.png");
+    });
+
+    test('Character test: No image map', () {
+      Character character = Character.fromMap(noImageCharacterMap);
+      expect(character.name, "Apu Nahasapeemapetilon");
+      expect(character.description,
+          "Apu Nahasapeemapetilon - Apu Nahasapeemapetilon is a recurring character in the American animated television series The Simpsons…");
+      expect(character.imageURL, "");
+    });
+
+    test('Character test: Empty map', () {
+      Character character = Character.fromMap(emptyCharacterMap);
+      expect(character.name, "");
+      expect(character.description, "");
+      expect(character.imageURL, "");
+    });
   });
 
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
