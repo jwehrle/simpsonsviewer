@@ -47,17 +47,22 @@ class AppController {
       return List<Character>.from(
           characterList.map((map) => Character.fromMap(map)));
     }
-    return Future.error('HTTP request failed with status code: ${response.statusCode}');
+    return Future.error(
+        'HTTP request failed with status code: ${response.statusCode}');
   }
 
   /// Returns list of all Characters where "Text" field contains [search]
   Future<List<Character>> fetchAllContaining(String search) async {
-    final characterList = await fetchAll();
-    return characterList
-        .where((character) =>
-            character.name.contains(search) ||
-            character.description.contains(search))
-        .toList();
+    try {
+      final characterList = await fetchAll();
+      return characterList
+          .where((character) =>
+              character.name.contains(search) ||
+              character.description.contains(search))
+          .toList();
+    } catch (e) {
+      return [];
+    }
   }
 
   /// Dispose of resources that need to be disposed.
