@@ -20,26 +20,39 @@ class Character {
   }
 
   factory Character.fromMap(Map<String, dynamic> map) {
+    final String text = map['Text'] ?? '';
+    final textList = text.split(' ');
+    String name = '';
+    if (textList.isNotEmpty) {
+      final nameList = textList.sublist(0, textList.length > 1 ? 2 : 1);
+      name = nameList.length == 1
+          ? nameList[0]
+          : '${nameList.first} ${nameList[1]}';
+    }
+    final Map icon = map["Icon"] ?? {};
+    final url = icon["URL"] ?? '';
     return Character._(
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      imageURL: map['imageURL'] ?? '',
+      name: name,
+      description: text,
+      imageURL: url,
     );
   }
 
-  factory Character.fromJson(String source) => Character.fromMap(json.decode(source));
+  factory Character.fromJson(String source) =>
+      Character.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Character(name: $name, description: $description, imageURL: $imageURL)';
+  String toString() =>
+      'Character(name: $name, description: $description, imageURL: $imageURL)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Character &&
-      other.name == name &&
-      other.description == description &&
-      other.imageURL == imageURL;
+        other.name == name &&
+        other.description == description &&
+        other.imageURL == imageURL;
   }
 
   @override
