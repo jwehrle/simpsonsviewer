@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Extracts first and last name of character from [text]. Expects first and
 /// last name to be first and second words in [text]. "Words" == one or more letters
 /// separated by a single space.
@@ -45,7 +47,8 @@ class Character {
   final String imageURL;
 
   /// Private constructor. Use only Character.fromMap()
-  Character._({
+  @visibleForTesting
+  Character({
     required this.name,
     required this.description,
     required this.imageURL,
@@ -55,7 +58,7 @@ class Character {
   /// duckduckgo API. See https://serpapi.com/duckduckgo-search-api
   factory Character.fromMap(Map<String, dynamic> map) {
     final String text = map['Text'] ?? '';
-    return Character._(
+    return Character(
       name: _extractName(text),
       description: text,
       imageURL: _extractImageURL(map),

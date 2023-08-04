@@ -1,17 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:simpsonsviewer/models/character.dart';
 
+/// Interpolates [showName] into URI
 String _duckDuckGoQuery(String showName) {
   return "http://api.duckduckgo.com/?q=$showName+characters&format=json";
 }
 
 class AppController {
-
   /// The name of the used in the query field of the duckduckgo API call.
   /// [showName] must conform to API. See https://serpapi.com/duckduckgo-search-api
   final String showName;
+
+  final http.Client client;
 
   /// Creates a controller for this application which can:
   /// Fetch all characters from [showName],
@@ -19,6 +23,7 @@ class AppController {
   /// Character selection.
   AppController({
     required this.showName,
+    required this.client,
   });
 
   /// Underlying selection ValueNotifier.
@@ -33,13 +38,26 @@ class AppController {
   set select(Character? character) => _selectedCharacter.value = character;
 
   /// Returns list of all characters.
-  List<Character> fetchAll() {
-    return [];
+  Future<List<Character>> fetchAll() async {
+    String url = _duckDuckGoQuery(showName);
+    final response = await client.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      final List characterList = result["RelatedTopics"] ?? [];
+      return List<Character>.from(
+          characterList.map((map) => Character.fromMap(map)));
+    }
+    return Future.error('HTTP request failed with status code: ${response.statusCode}');
   }
 
   /// Returns list of all Characters where "Text" field contains [search]
-  List<Character> fetchAllContaining(String search) {
-    return [];
+  Future<List<Character>> fetchAllContaining(String search) async {
+    final characterList = await fetchAll();
+    return characterList
+        .where((character) =>
+            character.name.contains(search) ||
+            character.description.contains(search))
+        .toList();
   }
 
   /// Dispose of resources that need to be disposed.
