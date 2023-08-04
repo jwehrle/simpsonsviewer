@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:simpsonsviewer/controllers/app_controller.dart';
 
 import 'package:simpsonsviewer/main.dart';
 import 'package:simpsonsviewer/models/character.dart';
@@ -91,6 +92,43 @@ void main() {
       expect(character.name, "");
       expect(character.description, "");
       expect(character.imageURL, "");
+    });
+  });
+
+  group("AppController tests", () { 
+    test('showName', () {
+      AppController controller = AppController(showName: "simpsons");
+    expect(controller.showName, "simpsons");
+    controller.dispose();
+    });
+
+    test('fetchAll', () {
+      AppController controller = AppController(showName: "simpsons");
+      final result = controller.fetchAll();
+    expect(result, <Character>[]);
+    controller.dispose();
+    });
+
+    test('fetchAllContaining', () {
+      AppController controller = AppController(showName: "simpsons");
+    final result = controller.fetchAllContaining('test');
+    expect(result, <Character>[]);
+    controller.dispose();
+    });
+
+    test('select', () {
+      Character character = Character.fromMap(wellFormedCharacterMap);
+      AppController controller = AppController(showName: "simpsons");
+      controller.selectedCharacter.addListener(() => expect(controller.selectedCharacter, character));
+      controller.select = character;
+      controller.dispose();
+    });
+
+    test('unselect', () {
+      AppController controller = AppController(showName: "simpsons");
+      controller.selectedCharacter.addListener(() => expect(controller.selectedCharacter, null));
+      controller.select = null;
+      controller.dispose();
     });
   });
 
