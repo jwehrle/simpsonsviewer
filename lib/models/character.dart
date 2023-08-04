@@ -1,5 +1,21 @@
 import 'dart:convert';
 
+String _extractName(String text) {
+  final textList = text.split(' ');
+  String name = '';
+  if (textList.isNotEmpty) {
+    final nameList = textList.sublist(0, textList.length > 1 ? 2 : 1);
+    name =
+        nameList.length == 1 ? nameList[0] : '${nameList.first} ${nameList[1]}';
+  }
+  return name;
+}
+
+String _extractImageURL(Map<String, dynamic> map) {
+  final Map icon = map["Icon"] ?? {};
+  return icon["URL"] ?? '';
+}
+
 class Character {
   final String name;
   final String description;
@@ -21,20 +37,10 @@ class Character {
 
   factory Character.fromMap(Map<String, dynamic> map) {
     final String text = map['Text'] ?? '';
-    final textList = text.split(' ');
-    String name = '';
-    if (textList.isNotEmpty) {
-      final nameList = textList.sublist(0, textList.length > 1 ? 2 : 1);
-      name = nameList.length == 1
-          ? nameList[0]
-          : '${nameList.first} ${nameList[1]}';
-    }
-    final Map icon = map["Icon"] ?? {};
-    final url = icon["URL"] ?? '';
     return Character._(
-      name: name,
+      name: _extractName(text),
       description: text,
-      imageURL: url,
+      imageURL: _extractImageURL(map),
     );
   }
 
