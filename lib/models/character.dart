@@ -1,23 +1,14 @@
 import 'package:flutter/foundation.dart';
 
-/// Extracts first and last name of character from [text]. Expects first and
-/// last name to be first and second words in [text]. "Words" == one or more letters
-/// separated by a single space.
-/// If [text] has 2 or more words, returns first as firs name and second as last name.
-/// If [text] is empty, returns empty string.
-/// If [text] has only one word, returns that one word.
+/// Extracts name of character from [text]. Expects whatever text
+/// precedes the first ' - ' pattern to be the character's name.
+/// If this pattern is not present, returns entire [text] as name.
 String _extractName(String text) {
-  final textList = text.split(' ');
-  if (textList.isEmpty) {
-    return '';
-  }
-  int end = textList.indexOf('-');
+  int end = text.indexOf(' - ');
   if (end == -1) {
-    end = textList.length > 1 ? 2 : 1;
+    return text;
   }
-  final nameList = textList.sublist(0, end);
-  nameList.join(' ');
-  return nameList.join(' ');
+  return text.substring(0, end);
 }
 
 /// Extracts image url from [map].
