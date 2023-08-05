@@ -4,11 +4,15 @@ import 'dart:io' show Platform;
 
 import 'package:simpsonsviewer/models/character.dart';
 
+/// Displays list of character names adaptively based on
+/// platform and [useScaffold], which is set by the device size
+/// and indicates phone or tablet.
 class CharacterList extends StatelessWidget {
   final Future<List<Character>> Function() getCharacterList;
   final ValueChanged<Character?> onSelect;
   final bool useScaffold;
 
+  /// Creates a list of character names using [getCharacterList]
   const CharacterList({
     super.key,
     required this.getCharacterList,
@@ -37,6 +41,7 @@ class CharacterList extends StatelessWidget {
                 return CharacterListBody(
                   characters: snap.data!,
                   useScaffold: useScaffold,
+                  onSelect: onSelect,
                 );
               }
               if (snap.hasError) {
@@ -48,6 +53,7 @@ class CharacterList extends StatelessWidget {
               return CharacterListBody(
                 characters: const [],
                 useScaffold: useScaffold,
+                onSelect: onSelect,
               );
           }
         });
@@ -90,11 +96,13 @@ class CharacterListLoading extends StatelessWidget {
 class CharacterListBody extends StatelessWidget {
   final List<Character> characters;
   final bool useScaffold;
+  final ValueChanged<Character?> onSelect;
 
   const CharacterListBody({
     super.key,
     required this.characters,
     required this.useScaffold,
+    required this.onSelect,
   });
 
   @override
@@ -103,7 +111,10 @@ class CharacterListBody extends StatelessWidget {
       final Widget cuperChild = SingleChildScrollView(
         child: CupertinoListSection(
           children: characters
-              .map((e) => CupertinoListTile(title: Text(e.name)))
+              .map((e) => CupertinoListTile(
+                    title: Text(e.name),
+                    onTap: () => onSelect(e),
+                  ))
               .toList(),
         ),
       );
@@ -115,7 +126,12 @@ class CharacterListBody extends StatelessWidget {
       return cuperChild;
     }
     final Widget matChild = ListView(
-      children: characters.map((e) => ListTile(title: Text(e.name))).toList(),
+      children: characters
+          .map((e) => ListTile(
+                title: Text(e.name),
+                onTap: () => onSelect(e),
+              ))
+          .toList(),
     );
     if (useScaffold) {
       return Scaffold(
