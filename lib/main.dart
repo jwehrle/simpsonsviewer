@@ -1,17 +1,49 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simpsonsviewer/controllers/app_controller.dart';
+import 'package:simpsonsviewer/views/adaptive_layout.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+  
+  @override
+  State<StatefulWidget> createState() => MyAppState();
+
+}
+
+class MyAppState extends State<MyApp> {
+
+  late final AppController controller;
+  late final http.Client client;
+
+  @override
+  void initState() {
+    super.initState();
+    client = http.Client();
+    controller = AppController(showName: 'simpsons', client: client);
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return CupertinoApp(
+        title: 'Simpsons!',
+        theme: const CupertinoThemeData(
+          primaryColor: CupertinoColors.systemPurple,
+        ),
+        home: AdaptiveLayout(controller: controller),
+      );
+    }
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Simpsons',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -31,8 +63,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: AdaptiveLayout(controller: controller),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    client.close();
+    super.dispose();
   }
 }
 

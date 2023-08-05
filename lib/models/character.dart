@@ -11,8 +11,13 @@ String _extractName(String text) {
   if (textList.isEmpty) {
     return '';
   }
-  final nameList = textList.sublist(0, textList.length > 1 ? 2 : 1);
-  return nameList.length == 1 ? nameList[0] : '${nameList[0]} ${nameList[1]}';
+  int end = textList.indexOf('-');
+  if (end == -1) {
+    end = textList.length > 1 ? 2 : 1;
+  }
+  final nameList = textList.sublist(0, end);
+  nameList.join(' ');
+  return nameList.join(' ');
 }
 
 /// Extracts image url from [map].
