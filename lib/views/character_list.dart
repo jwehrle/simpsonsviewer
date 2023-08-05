@@ -116,6 +116,7 @@ class CharacterListBody extends StatelessWidget {
     if (Platform.isIOS) {
       final Widget cuperChild = SingleChildScrollView(
         child: CupertinoListSection(
+          header: const CupertinoSearchTextField(),
           children: characters
               .map((e) => CupertinoListTile(
                     title: Text(e.name),
@@ -150,7 +151,22 @@ class CharacterListBody extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Characters'),
         ),
-        body: matChild,
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SearchAnchor.bar(suggestionsBuilder: (context, ctl) {
+              return ctl.value.text.isEmpty
+                  ? []
+                  : characters
+                      .where((e) => e.description
+                          .toLowerCase()
+                          .contains(ctl.value.text.toLowerCase()))
+                      .map((e) => ListTile(title: Text(e.description)))
+                      .toList();
+            }),
+            Expanded(child: matChild),
+          ],
+        ),
       );
     }
     return matChild;
