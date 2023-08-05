@@ -76,6 +76,9 @@ class CharacterListLoading extends StatelessWidget {
       );
       if (useScaffold) {
         return const CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            middle: Text('Characters'),
+          ),
           child: cuperChild,
         );
       }
@@ -85,7 +88,10 @@ class CharacterListLoading extends StatelessWidget {
       child: CircularProgressIndicator(),
     );
     if (useScaffold) {
-      return const Scaffold(
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Characters'),
+        ),
         body: matChild,
       );
     }
@@ -120,7 +126,13 @@ class CharacterListBody extends StatelessWidget {
       );
       if (useScaffold) {
         return CupertinoPageScaffold(
-          child: cuperChild,
+          navigationBar: const CupertinoNavigationBar(
+            middle: Text('Characters'),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 68.0),
+            child: cuperChild,
+          ),
         );
       }
       return cuperChild;
@@ -135,6 +147,9 @@ class CharacterListBody extends StatelessWidget {
     );
     if (useScaffold) {
       return Scaffold(
+        appBar: AppBar(
+          title: const Text('Characters'),
+        ),
         body: matChild,
       );
     }
@@ -162,6 +177,9 @@ class CharacterListError extends StatelessWidget {
       );
       if (useScaffold) {
         return CupertinoPageScaffold(
+          navigationBar: const CupertinoNavigationBar(
+            middle: Text('Characters'),
+          ),
           child: cuperChild,
         );
       }
@@ -174,6 +192,9 @@ class CharacterListError extends StatelessWidget {
     );
     if (useScaffold) {
       return Scaffold(
+        appBar: AppBar(
+          title: const Text('Characters'),
+        ),
         body: matChild,
       );
     }
