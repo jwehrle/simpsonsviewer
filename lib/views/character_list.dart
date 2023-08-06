@@ -173,10 +173,12 @@ class _CharacterListBodyState extends State<CharacterListBody> {
         ? CupertinoListTile(
             title: Text(character.name),
             subtitle: _subtitle(character, text, brightness),
+            onTap: () => widget.onSelect(character),
           )
         : ListTile(
             title: Text(character.name),
             subtitle: _subtitle(character, text, brightness),
+            onTap: () => widget.onSelect(character)
           );
   }
 
@@ -264,6 +266,7 @@ class _CharacterListBodyState extends State<CharacterListBody> {
               false,
               Theme.of(context).brightness,
             ),
+            isFullScreen: widget.useScaffold,
           ),
         ),
         Expanded(child: matChild),
