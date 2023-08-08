@@ -51,20 +51,6 @@ class AppController {
         'HTTP request failed with status code: ${response.statusCode}');
   }
 
-  /// Returns list of all Characters where "Text" field contains [search]
-  Future<List<Character>> fetchAllContaining(String search) async {
-    try {
-      final characterList = await fetchAll();
-      return characterList
-          .where((character) =>
-              character.name.contains(search) ||
-              character.description.contains(search))
-          .toList();
-    } catch (e) {
-      return [];
-    }
-  }
-
   /// Dispose of resources that need to be disposed.
   void dispose() {
     _selectedCharacter.dispose();
