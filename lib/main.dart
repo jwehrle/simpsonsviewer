@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:simpsonsviewer/controllers/app_controller.dart';
-import 'package:simpsonsviewer/views/adaptive_layout.dart';
+import 'package:simpsonsviewer/base/controllers/app_controller.dart';
+import 'package:simpsonsviewer/base/views/adaptive_layout.dart';
 
 void main() {
   runApp(const MyApp());

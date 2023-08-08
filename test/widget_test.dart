@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
-import 'package:simpsonsviewer/controllers/app_controller.dart';
+import 'package:simpsonsviewer/base/controllers/app_controller.dart';
 
-import 'package:simpsonsviewer/models/character.dart';
-import 'package:simpsonsviewer/views/adaptive_layout.dart';
-import 'package:simpsonsviewer/views/character_detail.dart';
-import 'package:simpsonsviewer/views/character_list.dart';
+import 'package:simpsonsviewer/base/models/character.dart';
+import 'package:simpsonsviewer/base/views/adaptive_layout.dart';
+import 'package:simpsonsviewer/base/views/character_detail.dart';
+import 'package:simpsonsviewer/base/views/character_list.dart';
 
 class MockAppController extends Mock implements AppController {}
 

@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-import 'package:simpsonsviewer/models/character.dart';
-import 'package:simpsonsviewer/models/constants.dart';
+import 'package:simpsonsviewer/base/models/character.dart';
+import 'package:simpsonsviewer/base/models/constants.dart';
 
 class CharacterDetailTablet extends StatelessWidget {
   const CharacterDetailTablet({

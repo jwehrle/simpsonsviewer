@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
-import 'package:simpsonsviewer/controllers/app_controller.dart';
-import 'package:simpsonsviewer/models/character.dart';
-import 'package:simpsonsviewer/models/constants.dart';
-import 'package:simpsonsviewer/views/character_detail.dart';
-import 'package:simpsonsviewer/views/character_list.dart';
+import 'package:simpsonsviewer/base/controllers/app_controller.dart';
+import 'package:simpsonsviewer/base/models/character.dart';
+import 'package:simpsonsviewer/base/models/constants.dart';
+import 'package:simpsonsviewer/base/views/character_detail.dart';
+import 'package:simpsonsviewer/base/views/character_list.dart';
 
 /// Display for app. Adaptive to size (tablet or phone), orientation
 /// (in large size), and platform (iOS or otherwise).
