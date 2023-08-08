@@ -5,12 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:simpsonsviewer/base/models/character.dart';
 import 'package:simpsonsviewer/base/models/constants.dart';
 
+/// Character detail view used for larger screens.
+/// Always visible and changes its view depending on 
+/// the value of [selectedCharacter].
 class CharacterDetailTablet extends StatelessWidget {
+
+  /// Creates a character detail view used for larger screens.
+  /// Always visible and changes its view depending on 
+  /// the value of [selectedCharacter].
   const CharacterDetailTablet({
     super.key,
     required this.selectedCharacter,
   });
 
+  /// ValueListenable used in ValueListenableBuilder.
+  /// When value is null, an empty Container is shown.
+  /// When value is not null, character image (if imageURL
+  /// is not empty), name, and description are shown.
+  /// Transitions are fade-animated.
   final ValueListenable<Character?> selectedCharacter;
 
   @override
@@ -53,9 +65,23 @@ class CharacterDetailTablet extends StatelessWidget {
   }
 }
 
+/// Character detail view for smaller screens. Instead of
+/// being always visible, this view is only shown 
+/// when an item in CharacterList is tapped.
+/// Then [character] is passed to this view which displays
+/// character image (if imageURL is not empty), name,
+/// and description are shown.
 class CharacterDetailPhone extends StatelessWidget {
+
+  /// Creates character detail view for smaller screens. Instead of
+  /// being always visible, this view is only shown 
+  /// when an item in CharacterList is tapped.
+  /// Then [character] is passed to this view which displays
+  /// character image (if imageURL is not empty), name,
+  /// and description are shown.
   const CharacterDetailPhone({super.key, required this.character});
 
+  /// The character for which details are shown.
   final Character character;
 
   @override
@@ -97,7 +123,13 @@ class CharacterDetailPhone extends StatelessWidget {
   }
 }
 
+/// Shows the newtork image of [character.imageURL] if it is
+/// not empty otherwise shows a "no image" asset.
 class CharacterImage extends StatelessWidget {
+
+  /// Creates a widget that shows the newtork image of
+  ///  [character.imageURL] if it is not empty otherwise
+  ///  shows a "no image" asset.
   const CharacterImage({
     super.key,
     required this.character,
@@ -124,7 +156,12 @@ class CharacterImage extends StatelessWidget {
   }
 }
 
+/// Shows the [character.name] and [character.description]
+/// in a platfor adaptive list tile.
 class CharacterDescription extends StatelessWidget {
+
+  /// Creates a widget that shows the [character.name] and
+  ///  [character.description] in a platfor adaptive list tile.
   const CharacterDescription({
     super.key,
     required this.character,
