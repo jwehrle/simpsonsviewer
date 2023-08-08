@@ -10,6 +10,7 @@ import 'package:simpsonsviewer/base/views/character_detail.dart';
 /// platform and [useScaffold], which is set by the device size
 /// and indicates phone or tablet.
 class CharacterList extends StatelessWidget {
+  final String appTitle;
   final Future<List<Character>> Function() getCharacterList;
   final ValueChanged<Character?> onSelect;
   final bool useScaffold;
@@ -21,6 +22,7 @@ class CharacterList extends StatelessWidget {
   /// otherwise Material widgets are used.
   const CharacterList({
     super.key,
+    required this.appTitle,
     required this.getCharacterList,
     required this.onSelect,
     required this.useScaffold,
@@ -45,6 +47,7 @@ class CharacterList extends StatelessWidget {
             case ConnectionState.done:
               if (snap.hasData) {
                 return CharacterListBody(
+                  appTitle: appTitle,
                   characters: snap.data!,
                   useScaffold: useScaffold,
                   onSelect: onSelect,
@@ -57,6 +60,7 @@ class CharacterList extends StatelessWidget {
                 );
               }
               return CharacterListBody(
+                appTitle: appTitle,
                 characters: const [],
                 useScaffold: useScaffold,
                 onSelect: onSelect,
@@ -113,6 +117,7 @@ class CharacterListLoading extends StatelessWidget {
 /// Widget is adaptive to iOS, in which case it makes Cupertino widgets,
 /// otherwise Material widgets are used.
 class CharacterListBody extends StatefulWidget {
+  final String appTitle;
   final List<Character> characters;
   final bool useScaffold;
   final ValueChanged<Character?> onSelect;
@@ -124,6 +129,7 @@ class CharacterListBody extends StatefulWidget {
   /// otherwise Material widgets are used.
   const CharacterListBody({
     super.key,
+    required this.appTitle,
     required this.characters,
     required this.useScaffold,
     required this.onSelect,
@@ -249,7 +255,6 @@ class _CharacterListBodyState extends State<CharacterListBody> {
 
   @override
   Widget build(BuildContext context) {
-    const title = Text('Characters');
     if (Platform.isIOS) {
       final Widget cuperChild = SingleChildScrollView(
         child: CupertinoListSection(
@@ -268,7 +273,7 @@ class _CharacterListBodyState extends State<CharacterListBody> {
       );
       if (widget.useScaffold) {
         return CupertinoPageScaffold(
-          navigationBar: const CupertinoNavigationBar(middle: title),
+          navigationBar: CupertinoNavigationBar(middle: Text(widget.appTitle)),
           child: Padding(
             padding: kCupertinoNavBarHeight,
             child: cuperChild,
@@ -299,7 +304,7 @@ class _CharacterListBodyState extends State<CharacterListBody> {
     );
     if (widget.useScaffold) {
       return Scaffold(
-        appBar: AppBar(title: title),
+        appBar: AppBar(title: Text(widget.appTitle)),
         body: matChild,
       );
     }

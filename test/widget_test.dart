@@ -183,8 +183,11 @@ void main() {
     MockClient client =
         MockClient((request) => Future.value(Response(body, 200)));
     final controller = AppController(showName: 'Simpsons', client: client);
-    await tester
-        .pumpWidget(MaterialApp(home: AdaptiveLayout(controller: controller)));
+    await tester.pumpWidget(MaterialApp(
+        home: AdaptiveLayout(
+      appTitle: 'Test Title',
+      controller: controller,
+    )));
     expect(find.byType(CharacterList), findsOneWidget);
     await tester.pumpAndSettle();
     // find an item by text and tap
@@ -209,8 +212,8 @@ void main() {
   });
 
   testWidgets('CharacterDetailTablet', (WidgetTester tester) async {
-
-    final ValueNotifier<Character?> selectedCharacter = ValueNotifier(characterList[2]);
+    final ValueNotifier<Character?> selectedCharacter =
+        ValueNotifier(characterList[2]);
 
     await mockNetworkImages(
       () async => tester.pumpWidget(

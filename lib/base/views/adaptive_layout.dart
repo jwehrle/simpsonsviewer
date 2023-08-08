@@ -17,7 +17,13 @@ class AdaptiveLayout extends StatelessWidget {
   ///  (tablet or phone), orientation (in large size), and
   /// platform (iOS or otherwise). In large mode, displays
   /// list + detail of selected Character. In small mode, displays list.
-  const AdaptiveLayout({super.key, required this.controller});
+  const AdaptiveLayout({
+    super.key,
+    required this.appTitle,
+    required this.controller,
+  });
+
+  final String appTitle;
 
   /// Controller for fetching list of characters and selecting
   /// characters
@@ -43,6 +49,7 @@ class AdaptiveLayout extends StatelessWidget {
       return LayoutBuilder(
         builder: (context, constraints) {
           return SizeAdaptiveView(
+            appTitle: appTitle,
             isLarge: _isLarge(context, constraints),
             orientation: orientation,
             getCharacterList: controller.fetchAll,
@@ -74,12 +81,15 @@ class SizeAdaptiveView extends StatelessWidget {
   /// [onSelect] : Function used to select character
   const SizeAdaptiveView({
     super.key,
+    required this.appTitle,
     required this.isLarge,
     required this.orientation,
     required this.selectedCharacter,
     required this.getCharacterList,
     required this.onSelect,
   });
+
+  final String appTitle;
 
   ///Whether device is larger than a phone (tablet)
   final bool isLarge;
@@ -101,12 +111,14 @@ class SizeAdaptiveView extends StatelessWidget {
   Widget build(BuildContext context) {
     return isLarge
         ? ListDetail(
+            appTitle: appTitle,
             orientation: orientation,
             selectedCharacter: selectedCharacter,
             getCharacterList: getCharacterList,
             onSelect: onSelect,
           )
         : CharacterList(
+            appTitle: appTitle,
             getCharacterList: getCharacterList,
             onSelect: onSelect,
             useScaffold: true,
@@ -129,11 +141,14 @@ class ListDetail extends StatelessWidget {
   /// [onSelect] callback for list to select characters.
   const ListDetail({
     super.key,
+    required this.appTitle,
     required this.orientation,
     required this.selectedCharacter,
     required this.getCharacterList,
     required this.onSelect,
   });
+
+  final String appTitle;
 
   /// Device orientation. Determines direction and location
   /// of list and detail
@@ -149,7 +164,7 @@ class ListDetail extends StatelessWidget {
   /// Callback for list items to select character
   final ValueChanged<Character?> onSelect;
 
-  final String  _listHero = 'list_hero';
+  final String _listHero = 'list_hero';
   final String _detailHero = 'detail_hero';
 
   @override
@@ -158,6 +173,7 @@ class ListDetail extends StatelessWidget {
     Widget list = Hero(
       tag: _listHero,
       child: CharacterList(
+        appTitle: appTitle,
         getCharacterList: getCharacterList,
         onSelect: onSelect,
         useScaffold: false,
@@ -193,8 +209,9 @@ class ListDetail extends StatelessWidget {
       direction: direction,
       children: flexChildren,
     );
-    const Widget  title = Text('The Simpsons');
-    return Platform.isIOS ? CupertinoPageScaffold(
+    const Widget title = Text('The Simpsons');
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
             navigationBar: const CupertinoNavigationBar(
               middle: title,
             ),

@@ -41,7 +41,10 @@ class TheSimpsonsAppState extends State<TheSimpsonsApp> {
     if (Platform.isIOS) {
       return CupertinoApp(
         title: kAppTitle,
-        home: AdaptiveLayout(controller: _controller),
+        home: AdaptiveLayout(
+          appTitle: 'The Simpsons Viewer',
+          controller: _controller,
+        ),
       );
     }
     return MaterialApp(
@@ -50,7 +53,10 @@ class TheSimpsonsAppState extends State<TheSimpsonsApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: AdaptiveLayout(controller: _controller),
+      home: AdaptiveLayout(
+        appTitle: 'The Simpsons Viewer',
+        controller: _controller,
+      ),
     );
   }
 
