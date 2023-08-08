@@ -6,71 +6,58 @@ import 'package:flutter/material.dart';
 import 'package:simpsonsviewer/base/controllers/app_controller.dart';
 import 'package:simpsonsviewer/base/views/adaptive_layout.dart';
 
+const String kSimpsonsID = 'simpsons';
+const String kAppTitle = 'The Simpsons';
+
 void main() {
-  runApp(const MyApp());
+  runApp(const TheSimpsonsApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-  
+/// App for exploring the characters of The Simpsons TV Show.
+/// Adaptive for:
+/// - Android and iOS
+/// - Phone and Tablet
+/// - Light and Dark modes
+class TheSimpsonsApp extends StatefulWidget {
+  const TheSimpsonsApp({super.key});
+
   @override
-  State<StatefulWidget> createState() => MyAppState();
-
+  State<StatefulWidget> createState() => TheSimpsonsAppState();
 }
 
-class MyAppState extends State<MyApp> {
-
-  late final AppController controller;
-  late final http.Client client;
+class TheSimpsonsAppState extends State<TheSimpsonsApp> {
+  late final AppController _controller;
+  late final http.Client _client;
 
   @override
   void initState() {
     super.initState();
-    client = http.Client();
-    controller = AppController(showName: 'simpsons', client: client);
+    _client = http.Client();
+    _controller = AppController(showName: kSimpsonsID, client: _client);
   }
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     if (Platform.isIOS) {
       return CupertinoApp(
-        title: 'Simpsons!',
-        theme: const CupertinoThemeData(
-          primaryColor: CupertinoColors.systemPurple,
-        ),
-        home: AdaptiveLayout(controller: controller),
+        title: kAppTitle,
+        home: AdaptiveLayout(controller: _controller),
       );
     }
     return MaterialApp(
-      title: 'Simpsons',
+      title: kAppTitle,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: AdaptiveLayout(controller: controller),
+      home: AdaptiveLayout(controller: _controller),
     );
   }
 
   @override
   void dispose() {
-    controller.dispose();
-    client.close();
+    _controller.dispose();
+    _client.close();
     super.dispose();
   }
 }
