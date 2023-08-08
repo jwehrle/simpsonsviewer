@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 
 import 'package:simpsonsviewer/models/character.dart';
-
-const EdgeInsets kCupertinoNavBarHeight = EdgeInsets.only(top: 68.0);
-const EdgeInsets kMaterialSearchPadding = EdgeInsets.symmetric(horizontal: 8.0);
+import 'package:simpsonsviewer/models/constants.dart';
+import 'package:simpsonsviewer/views/character_detail.dart';
 
 /// Displays list of character names adaptively based on
 /// platform and [useScaffold], which is set by the device size
@@ -168,17 +167,21 @@ class _CharacterListBodyState extends State<CharacterListBody> {
   /// Transforms [character] into a platform adaptive tile with
   /// search substring in bold.
   Widget _transformCharacter(
-      Character character, String text, bool isIOS, Brightness brightness) {
+    Character character,
+    String text,
+    bool isIOS,
+    Brightness brightness,
+  ) {
     return isIOS
         ? CupertinoListTile(
             title: Text(character.name),
             subtitle: _subtitle(character, text, brightness),
-            onTap: () => widget.onSelect(character),
+            onTap: () => _tileTap(character),
           )
         : ListTile(
             title: Text(character.name),
             subtitle: _subtitle(character, text, brightness),
-            onTap: () => widget.onSelect(character)
+            onTap: () => _tileTap(character),
           );
   }
 
@@ -210,16 +213,38 @@ class _CharacterListBodyState extends State<CharacterListBody> {
     );
   }
 
+  void _tileTap(Character character) {
+    widget.onSelect(character);
+    if (widget.useScaffold) {
+      _openDetails(character);
+    }
+  }
+
+  void _openDetails(Character character) {
+    final route = Platform.isIOS
+        ? CupertinoPageRoute(
+            builder: (context) => CharacterDetailPhone(
+              character: character,
+            ),
+          )
+        : MaterialPageRoute(
+            builder: (context) => CharacterDetailPhone(
+              character: character,
+            ),
+          );
+    Navigator.of(context).push(route);
+  }
+
   /// Transforms [character] into a [CupertinoListTile]
   Widget _cuperTransform(Character character) => CupertinoListTile(
         title: Text(character.name),
-        onTap: () => widget.onSelect(character),
+        onTap: () => _tileTap(character),
       );
 
   /// Transforms [character] into a [ListTile]
   Widget _matTransform(Character character) => ListTile(
         title: Text(character.name),
-        onTap: () => widget.onSelect(character),
+        onTap: () => _tileTap(character),
       );
 
   @override

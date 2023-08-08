@@ -4,30 +4,22 @@ import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
 import 'package:simpsonsviewer/controllers/app_controller.dart';
 import 'package:simpsonsviewer/models/character.dart';
+import 'package:simpsonsviewer/models/constants.dart';
+import 'package:simpsonsviewer/views/character_detail.dart';
 import 'package:simpsonsviewer/views/character_list.dart';
 
-/// Leargest size of shortest side of a phone
-const double kSizeBreakPoint = 550.0;
-
-/// Flex for list in large mode
-const int kListFlex = 2;
-
-/// Flex for detail in large mode
-const int kDetailFlex = 3;
-
-/// Display for app. Adaptive to size (tablet or phone), orientation 
+/// Display for app. Adaptive to size (tablet or phone), orientation
 /// (in large size), and platform (iOS or otherwise).
 /// In large mode, displays list + detail of selected Character.
 /// In small mode, displays list.
 class AdaptiveLayout extends StatelessWidget {
-
   /// Creates a widget that displays for app. Adaptive to size
-  ///  (tablet or phone), orientation (in large size), and 
-  /// platform (iOS or otherwise). In large mode, displays 
+  ///  (tablet or phone), orientation (in large size), and
+  /// platform (iOS or otherwise). In large mode, displays
   /// list + detail of selected Character. In small mode, displays list.
   const AdaptiveLayout({super.key, required this.controller});
 
-  /// Controller for fetching list of characters and selecting 
+  /// Controller for fetching list of characters and selecting
   /// characters
   final AppController controller;
 
@@ -72,8 +64,7 @@ class AdaptiveLayout extends StatelessWidget {
 /// [getCharacterList] : Function used to fetch list of characters
 /// [onSelect] : Function used to select character
 class SizeAdaptiveView extends StatelessWidget {
-
-  /// Creates a widget that displays either [ListDetail] or 
+  /// Creates a widget that displays either [ListDetail] or
   /// [CharacterList] depending on [isLarge].
   /// [isLarge] : Whether device is larger than a phone (tablet)
   /// [orientation] : Orientation of device, used by [ListDetail]
@@ -130,13 +121,12 @@ class SizeAdaptiveView extends StatelessWidget {
 /// [getCharacterList] Function returns Future<List<Character>>
 /// [onSelect] callback for list to select characters.
 class ListDetail extends StatelessWidget {
-
-/// Creates a widget that displays both list and deatil views. 
-/// Facilitates search and selection and detail display in one view.
-/// [orientation] determines the location of list and detail.
-/// [selectedCharacter] ValueListenable detail listens to.
-/// [getCharacterList] Function returns Future<List<Character>>
-/// [onSelect] callback for list to select characters.
+  /// Creates a widget that displays both list and deatil views.
+  /// Facilitates search and selection and detail display in one view.
+  /// [orientation] determines the location of list and detail.
+  /// [selectedCharacter] ValueListenable detail listens to.
+  /// [getCharacterList] Function returns Future<List<Character>>
+  /// [onSelect] callback for list to select characters.
   const ListDetail({
     super.key,
     required this.orientation,
@@ -149,7 +139,7 @@ class ListDetail extends StatelessWidget {
   /// of list and detail
   final Orientation orientation;
 
-  /// ValueListenable to which detail listens to displays 
+  /// ValueListenable to which detail listens to displays
   /// character details.
   final ValueListenable<Character?> selectedCharacter;
 
@@ -159,53 +149,30 @@ class ListDetail extends StatelessWidget {
   /// Callback for list items to select character
   final ValueChanged<Character?> onSelect;
 
+  final String  _listHero = 'list_hero';
+  final String _detailHero = 'detail_hero';
+
   @override
   Widget build(BuildContext context) {
     // Make basic list view
-    Widget list = CharacterList(
-      getCharacterList: getCharacterList,
-      onSelect: onSelect,
-      useScaffold: false,
+    Widget list = Hero(
+      tag: _listHero,
+      child: CharacterList(
+        getCharacterList: getCharacterList,
+        onSelect: onSelect,
+        useScaffold: false,
+      ),
     );
-    // Wrap in platform specific scaffold
-    list = Platform.isIOS
-        ? CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(
-              middle: Text('Simpsons'),
-            ),
-            child: Padding(
-              padding: kCupertinoNavBarHeight,
-              child: list,
-            ),
-          )
-        : Scaffold(
-            appBar: AppBar(
-              title: const Text('Simpsons'),
-            ),
-            body: list,
-          );
-    // Wrap in Flixible for use in Flex
     list = Flexible(
       flex: kListFlex,
       child: list,
     );
-    Widget detail = ValueListenableBuilder<Character?>(
-      valueListenable: selectedCharacter,
-      builder: (context, value, _) {
-        return Center(
-          child: Text(value != null ? value.name : 'None selected'),
-        );
-      },
+    Widget detail = Hero(
+      tag: _detailHero,
+      child: CharacterDetailTablet(
+        selectedCharacter: selectedCharacter,
+      ),
     );
-    // Wrap in platform specific scaffold
-    detail = Platform.isIOS
-        ? CupertinoPageScaffold(
-            child: detail,
-          )
-        : Scaffold(
-            body: detail,
-          );
-    // Wrap in Flixible for use in Flex
     detail = Flexible(
       flex: kDetailFlex,
       child: detail,
@@ -215,14 +182,30 @@ class ListDetail extends StatelessWidget {
     final List<Widget> flexChildren;
     if (orientation == Orientation.portrait) {
       direction = Axis.vertical;
-      flexChildren = [detail, list];
+      flexChildren = [detail, const Divider(), list];
     } else {
       direction = Axis.horizontal;
-      flexChildren = [list, detail];
+      flexChildren = [list, const Divider(), detail];
     }
-    return Flex(
+    final body = Flex(
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       direction: direction,
       children: flexChildren,
     );
+    const Widget  title = Text('The Simpsons');
+    return Platform.isIOS ? CupertinoPageScaffold(
+            navigationBar: const CupertinoNavigationBar(
+              middle: title,
+            ),
+            child: Padding(
+              padding: kCupertinoNavBarHeight,
+              child: body,
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(title: title),
+            body: body,
+          );
   }
 }
