@@ -6,12 +6,11 @@ import 'package:simpsonsviewer/base/models/character.dart';
 import 'package:simpsonsviewer/base/models/constants.dart';
 
 /// Character detail view used for larger screens.
-/// Always visible and changes its view depending on 
+/// Always visible and changes its view depending on
 /// the value of [selectedCharacter].
 class CharacterDetailTablet extends StatelessWidget {
-
   /// Creates a character detail view used for larger screens.
-  /// Always visible and changes its view depending on 
+  /// Always visible and changes its view depending on
   /// the value of [selectedCharacter].
   const CharacterDetailTablet({
     super.key,
@@ -66,15 +65,14 @@ class CharacterDetailTablet extends StatelessWidget {
 }
 
 /// Character detail view for smaller screens. Instead of
-/// being always visible, this view is only shown 
+/// being always visible, this view is only shown
 /// when an item in CharacterList is tapped.
 /// Then [character] is passed to this view which displays
 /// character image (if imageURL is not empty), name,
 /// and description are shown.
 class CharacterDetailPhone extends StatelessWidget {
-
   /// Creates character detail view for smaller screens. Instead of
-  /// being always visible, this view is only shown 
+  /// being always visible, this view is only shown
   /// when an item in CharacterList is tapped.
   /// Then [character] is passed to this view which displays
   /// character image (if imageURL is not empty), name,
@@ -98,7 +96,8 @@ class CharacterDetailPhone extends StatelessWidget {
         ),
       ),
       Padding(
-        padding: Platform.isIOS ? kCupertinoDescriptionPadding : EdgeInsets.zero,
+        padding:
+            Platform.isIOS ? kCupertinoDescriptionPadding : EdgeInsets.zero,
         child: CharacterDescription(
           character: character,
         ),
@@ -126,7 +125,6 @@ class CharacterDetailPhone extends StatelessWidget {
 /// Shows the newtork image of [character.imageURL] if it is
 /// not empty otherwise shows a "no image" asset.
 class CharacterImage extends StatelessWidget {
-
   /// Creates a widget that shows the newtork image of
   ///  [character.imageURL] if it is not empty otherwise
   ///  shows a "no image" asset.
@@ -159,7 +157,6 @@ class CharacterImage extends StatelessWidget {
 /// Shows the [character.name] and [character.description]
 /// in a platfor adaptive list tile.
 class CharacterDescription extends StatelessWidget {
-
   /// Creates a widget that shows the [character.name] and
   ///  [character.description] in a platfor adaptive list tile.
   const CharacterDescription({
@@ -172,18 +169,18 @@ class CharacterDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final title = Text(character.name);
-    final desc = Text(
-      character.description,
-      maxLines: 20,
-    );
     return Platform.isIOS
         ? CupertinoListTile(
             title: title,
-            subtitle: desc,
+            subtitle: Text(
+              character.description,
+              style: const TextStyle(fontSize: 16.0),
+              maxLines: 50,
+            ),
           )
         : ListTile(
             title: title,
-            subtitle: desc,
+            subtitle: Text(character.description),
           );
   }
 }
