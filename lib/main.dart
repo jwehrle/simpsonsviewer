@@ -7,7 +7,7 @@ import 'package:simpsonsviewer/base/controllers/app_controller.dart';
 import 'package:simpsonsviewer/base/views/adaptive_layout.dart';
 
 const String kSimpsonsID = 'simpsons';
-const String kAppTitle = 'The Simpsons';
+const String kAppTitle = 'Simpsons Character Viewer';
 
 void main() {
   runApp(const TheSimpsonsApp());
@@ -42,7 +42,7 @@ class TheSimpsonsAppState extends State<TheSimpsonsApp> {
       return CupertinoApp(
         title: kAppTitle,
         home: AdaptiveLayout(
-          appTitle: 'The Simpsons Viewer',
+          appTitle: kAppTitle,
           controller: _controller,
         ),
       );
@@ -54,7 +54,7 @@ class TheSimpsonsAppState extends State<TheSimpsonsApp> {
         useMaterial3: true,
       ),
       home: AdaptiveLayout(
-        appTitle: 'The Simpsons Viewer',
+        appTitle: kAppTitle,
         controller: _controller,
       ),
     );
