@@ -52,7 +52,7 @@ class Character {
 
   /// Creates a Character from [map]. Expects key value pairs based on
   /// duckduckgo API. See https://serpapi.com/duckduckgo-search-api
-  factory Character.fromMap(Map<String, dynamic> map) {
+  static Character fromMap(Map<String, dynamic> map) {
     final String text = map['Text'] ?? '';
     return Character(
       name: _extractName(text),
